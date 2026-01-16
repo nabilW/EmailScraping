@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+.venv/
+.venv-extract/
+scrapy/.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log
+logs/
+output/logs/
+
+# Output data (contains scraped emails)
+output/*.csv
+output/*.txt
+output/*.json
+output/*.jsonl
+output/*.xlsx
+output/extract-emails/
+output/archive/
+output/logs/*.log
+!output/.gitkeep
+!output/README.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# TypeScript
+*.tsbuildinfo
+
+# Playwright
+.playwright/
+
+# Test outputs
+coverage/
