@@ -1,90 +1,193 @@
-# Email Scraping
+# 📧 Email Scraping Toolkit
 
-> **Educational Project** - Unified toolkit for discovering, enriching, and validating business contact data.
+<div align="center">
 
-> ⚠️ **Disclaimer**: This project is intended for **educational purposes only**. Users must comply with all applicable laws, respect robots.txt, website terms of service, and obtain proper consent before collecting personal information. The authors are not responsible for any misuse of this software.
+**A comprehensive, educational toolkit for discovering, extracting, enriching, and validating business contact information from web sources.**
 
-## Why This Project Exists
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue.svg)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Educational](https://img.shields.io/badge/Purpose-Educational-purple.svg)](LICENSE)
 
-Lead generation workflows often stitch together multiple utilities: map prospecting, HTML scraping, enrichment, and deliverability checks. Email Scraping merges proven ideas from projects such as [Map Email Scraper](https://github.com/MickeyUK/map-email-scraper), community-built email extractors, [MailScout deliverability probing](https://github.com/batuhanaky/mailscout), and web crawling utilities like [e-scraper](https://github.com/0x4D-5A/e-scraper) or [crawler-python](https://github.com/andripwn/crawler-python) into a modern TypeScript pipeline.
+> ⚠️ **Educational Purpose Only** - This project is intended for learning and educational purposes. Users must comply with all applicable laws, respect robots.txt, website terms of service, and obtain proper consent before collecting personal information.
 
-## Feature Highlights
+</div>
 
-- **Google Maps prospect discovery** — powered by the Places API for the “collections” style querying popularized by Map Email Scraper.
-- **Multi-layer HTML extraction** — regex, DOM, attribute scans, base64/unicode decoding inspired by battle-tested parsers.
-- **Recursive web crawling** — controlled depth, domain scoping, and external link filtering derived from Python crawlers.
-- **SMTP deliverability probing** — MX resolution with progressive failover as practiced by MailScout/MailTester workflows.
-- **Web reachability checks** — probes production and dev hostnames to ensure websites respond before trusting an address.
-- **Export flexibility** — JSON, CSV, and Excel output for downstream CRMs thanks to inspiration from WebDiver and MailScout exporters.
+---
 
-## Tech Stack
+## 📖 About
 
-- Node.js 18+, TypeScript, Playwright crawler, SMTP handshake verifier.
-- Async orchestration with `@supercharge/promise-pool` and modular service classes for easy substitution.
+**Email Scraping** is a unified, production-ready toolkit that combines multiple proven approaches to business contact discovery and validation. This educational project demonstrates modern web scraping techniques, email extraction methods, deliverability verification, and data enrichment workflows.
 
-## Repository Layout
+### What This Project Does
+
+This toolkit provides a complete pipeline for:
+
+- 🔍 **Business Discovery**: Find businesses using Google Maps Places API or manual targeting
+- 🕷️ **Web Crawling**: Recursively crawl websites with controlled depth and domain scoping
+- 📧 **Email Extraction**: Multi-layer extraction using regex, DOM parsing, attribute scanning, and obfuscation decoding
+- ✅ **Deliverability Verification**: SMTP handshake testing with MX record resolution
+- 🌐 **Domain Validation**: HTTP reachability checks to ensure websites are active
+- 💾 **Data Export**: Flexible output formats (JSON, CSV, Excel) for downstream integration
+
+### Why This Project Exists
+
+Lead generation workflows often require stitching together multiple utilities: map prospecting, HTML scraping, enrichment, and deliverability checks. This project merges proven ideas from community-built tools like:
+
+- [Map Email Scraper](https://github.com/MickeyUK/map-email-scraper) - Google Maps prospecting
+- [MailScout](https://github.com/batuhanaky/mailscout) - Deliverability probing patterns
+- [e-scraper](https://github.com/0x4D-5A/e-scraper) - Web crawling utilities
+- [crawler-python](https://github.com/andripwn/crawler-python) - Recursive crawling strategies
+
+All integrated into a modern TypeScript pipeline with performance optimizations, caching, and database storage.
+
+### Key Features
+
+| Feature | Description |
+|---------|-------------|
+| 🗺️ **Google Maps Discovery** | Text search via Places API with pagination and rate limiting |
+| 🔄 **Recursive Web Crawling** | Controlled depth, domain scoping, and external link filtering |
+| 📧 **Multi-Layer Extraction** | Regex, DOM parsing, attribute scans, base64/unicode decoding |
+| ✅ **SMTP Deliverability** | MX resolution with progressive failover and SMTP handshake |
+| 🌐 **HTTP Validation** | Probes production and dev hostnames for reachability |
+| 💾 **Flexible Export** | JSON, CSV, and Excel output for CRM integration |
+| 🚀 **Performance Optimized** | LRU caching, connection pooling, parallel processing |
+| 🗄️ **Database Storage** | SQLite integration for large-scale datasets |
+
+---
+
+## 🏗️ Architecture Overview
+
+The project follows a modular architecture with clear separation of concerns:
 
 ```
-EmailScraping/
-├── config/                     # Seed and environment templates
-├── docs/                        # Additional project documentation
-├── output/                      # Aggregated scrape artefacts (JSON/CSV/XLSX/TXT)
-│   ├── dataemails.txt          # Main email archive
-│   ├── emails.txt              # New emails from scraping sessions
-│   ├── logs/                    # All log files
-│   └── extract-emails/         # Python extract-emails CSV outputs
-├── queries/                     # Query files for batch processing
-├── scripts/
-│   ├── python/                 # Selenium / requests helpers and rich scrapers
-│   └── typescript/             # Node/TS automation invoked via `npm run`
-├── scrapy/                      # Scrapy spiders for bulk crawling
-├── src/                         # Primary TypeScript application code
-└── tests/                       # Vitest unit/integration coverage
+┌─────────────────────────────────────────────────────────┐
+│                    Pipeline Orchestrator                  │
+│              (EmailScrapingPipeline)                      │
+└──────────────┬──────────────────────────────────────────┘
+               │
+    ┌──────────┼──────────┐
+    │          │          │
+┌───▼───┐  ┌──▼───┐  ┌───▼────┐
+│Scraper│  │Extract│  │Verify  │
+│       │  │       │  │        │
+│• Maps │  │• Regex│  │• SMTP  │
+│• Web  │  │• DOM  │  │• HTTP  │
+└───┬───┘  └───┬───┘  └───┬────┘
+    │          │          │
+    └──────────┼──────────┘
+               │
+        ┌──────▼──────┐
+        │ ResultStore │
+        │             │
+        │• JSON       │
+        │• CSV        │
+        │• Excel      │
+        │• Database   │
+        └─────────────┘
 ```
 
-> Tip: `scripts/README.md` summarises every helper and shows example invocations.
+### Core Modules
 
-## Getting Started
+| Module | Responsibility | Key Technologies |
+|--------|---------------|-----------------|
+| `GoogleMapsScraper` | Text search via Places API, pagination, rate limiting | Google Places API |
+| `WebCrawler` | Bounded-depth recursive crawling with external link guard | Playwright, Cheerio |
+| `EmailExtractor` | Multi-pass extraction (mailto, text, obfuscation decoding) | Regex, DOM parsing |
+| `DeliverabilityChecker` | MX lookup + SMTP handshake with progressive fallback | DNS, SMTP client |
+| `HttpDomainValidator` | HEAD/GET probes to confirm prod/dev web hosts respond | HTTP/HTTPS |
+| `ResultStore` | JSON/CSV/Excel export with optional database storage | SQLite, CSV/Excel writers |
+| `CacheManager` | LRU caching for HTTP, DNS, and HTML responses | In-memory LRU cache |
+| `EmailScrapingPipeline` | Orchestrates data flow, deduplication, and persistence | Promise pooling |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** 18.18.0 or higher
+- **npm** or **yarn** or **pnpm**
+- (Optional) **Python 3.10+** for Python helper scripts
+- (Optional) **Google Maps API Key** for Places discovery
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/nabilW/EmailScraping.git
 cd EmailScraping
-pnpm install # or npm install / yarn install
 
-# Copy and edit configuration
-cp config/example.env .env
+# Install dependencies
+npm install
+# or
+pnpm install
+# or
+yarn install
 ```
 
-Populate the `.env` file with:
+### Configuration
 
-- `GOOGLE_MAPS_API_KEY` (optional; required only for Google Places discovery)
-- `SMTP_PROBE_FROM` and `SMTP_PROBE_HELLO` (required when deliverability probing is enabled)
+1. **Copy the example environment file:**
+   ```bash
+   cp config/example.env .env
+   ```
 
-Run the pipeline:
+2. **Edit `.env` with your configuration:**
+   ```env
+   # Optional: Google Maps Places API (for business discovery)
+   GOOGLE_MAPS_API_KEY=your_api_key_here
+
+   # Required: SMTP deliverability probing
+   SMTP_PROBE_FROM=your-email@example.com
+   SMTP_PROBE_HELLO=your-domain.com
+
+   # Optional: Database storage
+   USE_DATABASE=true
+   DATABASE_PATH=./output/emails.db
+   ```
+
+### Quick Start Examples
+
+#### Basic Usage - Search by Term and Location
 
 ```bash
 npm run dev -- --term "business services" --location "New York" --country us
 ```
 
-Require that the website responds with 2xx/3xx and remove addresses tied to dead domains:
+#### Require Website Reachability
+
+Only keep emails from websites that respond with 2xx/3xx status codes:
 
 ```bash
-npm run dev -- --term "charter" --require-reachable
+npm run dev -- --term "consulting" --require-reachable
 ```
 
-Skip dev subdomain probing if internal hosts flag as false positives:
+#### Skip Dev Subdomain Probing
+
+Avoid false positives from internal development hosts:
 
 ```bash
 npm run dev -- --term "business" --skip-dev-subdomain
 ```
 
-### Batch Queries
+#### Manual Website Targeting
 
-You can provide a JSON file containing query objects:
+When you already know the domains you want to crawl:
+
+```bash
+npm run dev -- --website https://example.com --require-reachable
+```
+
+#### Batch Processing with Query File
+
+Create a JSON file with multiple queries:
 
 ```json
 [
   { "term": "business services", "location": "New York", "countryCode": "us" },
-  { "term": "consulting", "location": "London" }
+  { "term": "consulting", "location": "London", "countryCode": "gb" },
+  { "term": "technology", "location": "San Francisco", "countryCode": "us" }
 ]
 ```
 
@@ -92,29 +195,9 @@ You can provide a JSON file containing query objects:
 npm run dev -- --queries ./queries.json
 ```
 
-Outputs are saved to `./output/results.{json,csv,xlsx}` by default.
+#### Using Seed Files
 
-### Manual Targets (no Google Maps key)
-
-When you already know the domains you want to crawl, provide them directly:
-
-```bash
-npm run dev -- --website https://example.com --require-reachable
-```
-
-You can also provide a seed file with target websites:
-
-```bash
-npm run dev -- --seed config/seeds/example.json --require-reachable
-```
-
-Each seed entry can optionally include:
-
-- `extraPaths` or `extraUrls` – additional landing pages (contact, media, etc.) that should be crawled even if they are not linked from the homepage
-- `seedEmails` – known good addresses to bootstrap the dataset (these still run through dedupe + verification)
-- `allowedDomains` – restrict scraped emails to the airline’s own domains (helpful to exclude third-party agencies)
-
-Example seed file structure:
+For more control, use seed files with additional configuration:
 
 ```json
 [
@@ -123,7 +206,8 @@ Example seed file structure:
     "website": "https://www.example.com",
     "extraPaths": [
       "/contact",
-      "/about"
+      "/about",
+      "/team"
     ],
     "seedEmails": [
       "contact@example.com",
@@ -136,17 +220,102 @@ Example seed file structure:
 ]
 ```
 
-Besides `results.json`, `results.csv`, and `results.xlsx`, the run also produces `emails.txt` containing one email per line, deduplicated across all sources.
+```bash
+npm run dev -- --seed config/seeds/example.json --require-reachable
+```
 
-### Optional: Discover new domains via Google search
+**Seed File Options:**
+- `extraPaths` or `extraUrls` – Additional landing pages to crawl (contact, media, etc.)
+- `seedEmails` – Known good addresses to bootstrap the dataset
+- `allowedDomains` – Restrict scraped emails to specific domains
 
-When you need fresh domains before running the pipeline, you can launch the bundled Google discovery helper (inspired by community scrapers such as [TS-email-scraper](https://github.com/eneiromatos/TS-email-scraper)):
+### Output Files
+
+The pipeline generates several output files in the `output/` directory:
+
+- `results.json` – Complete structured data with metadata
+- `results.csv` – Spreadsheet-friendly format
+- `results.xlsx` – Excel workbook with formatted data
+- `emails.txt` – Simple one-email-per-line format, deduplicated
+- `emails.db` – SQLite database (if database storage is enabled)
+
+---
+
+## 📁 Repository Structure
+
+```
+EmailScraping/
+├── 📂 config/                     # Configuration templates
+│   └── example.env                # Environment variables template
+│
+├── 📂 docs/                        # Additional documentation
+│   └── WORKFLOWS.md               # Detailed workflow documentation
+│
+├── 📂 output/                      # Generated outputs
+│   ├── results.json               # Main JSON output
+│   ├── results.csv                # CSV export
+│   ├── results.xlsx               # Excel export
+│   ├── emails.txt                 # Simple email list
+│   ├── emails.db                  # SQLite database (optional)
+│   ├── logs/                      # Application logs
+│   └── extract-emails/            # Python extract-emails outputs
+│
+├── 📂 queries/                     # Query files for batch processing
+│   ├── africa_countries.txt
+│   ├── middle_east_africa.txt
+│   └── ...
+│
+├── 📂 scripts/                     # Helper scripts
+│   ├── 📂 python/                 # Python utilities
+│   │   ├── extract_emails_helper.py
+│   │   ├── verify_emails.py
+│   │   └── ...
+│   ├── 📂 typescript/             # TypeScript automation
+│   │   ├── googleSearch.ts
+│   │   ├── mergeScrapyEmails.ts
+│   │   └── ...
+│   └── README.md                  # Script documentation
+│
+├── 📂 scrapy/                      # Scrapy spiders for bulk crawling
+│   └── uae_airlines_crawler/
+│       └── uae_airlines_crawler/
+│           └── spiders/
+│               └── multi_contacts.py
+│
+├── 📂 src/                         # Main TypeScript application
+│   ├── 📂 extractors/             # Email extraction logic
+│   ├── 📂 pipeline/               # Main pipeline orchestration
+│   ├── 📂 scrapers/                # Web scraping modules
+│   ├── 📂 storage/                 # Data persistence
+│   ├── 📂 utils/                   # Utilities (cache, logger)
+│   ├── 📂 verifiers/               # Validation modules
+│   └── index.ts                    # Entry point
+│
+├── 📂 tests/                       # Unit and integration tests
+│   └── EmailExtractor.test.ts
+│
+├── 📄 README.md                    # This file
+├── 📄 LICENSE                      # MIT License
+├── 📄 CONTRIBUTING.md              # Contribution guidelines
+├── 📄 package.json                 # Node.js dependencies
+└── 📄 tsconfig.json                # TypeScript configuration
+```
+
+> 💡 **Tip**: Check `scripts/README.md` for detailed documentation on all helper scripts and example invocations.
+
+---
+
+## 🔧 Advanced Usage
+
+### Google Search Discovery
+
+Discover new domains before running the pipeline:
 
 ```bash
 # Inline queries (comma separated)
 npm run search:google -- --queries "business services,consulting companies" --limit 20
 
-# Or drive it from a config file
+# Or use a configuration file
 cat > config/google-search.json <<'JSON'
 {
   "queries": [
@@ -161,32 +330,28 @@ JSON
 npm run search:google -- --input config/google-search.json
 ```
 
-The script writes two handy artefacts:
+**Output Files:**
+- `output/google-search-results.json` – Full Google SERP entries
+- `output/google-search-domains.{txt,json}` – Deduplicated hostnames
 
-- `output/google-search-results.json`: full Google SERP entries (query, title, description, URL, domain).  
-- `output/google-search-domains.{txt,json}`: deduplicated hostnames ranked by frequency. Feed these into your seed list or the Python helper to keep growing the dataset.
-
-> **Tip:** Provide Google Programmable Search credentials for best results. Export your API key and custom search engine ID (CSE) before running:
+> 💡 **Tip**: For best results, provide Google Programmable Search credentials:
 > ```bash
-> export GOOGLE_API_KEY=\"your-api-key\"
-> export GOOGLE_CSE_ID=\"your-search-engine-id\"
+> export GOOGLE_API_KEY="your-api-key"
+> export GOOGLE_CSE_ID="your-search-engine-id"
 > ```
-> Without these, the helper falls back to a lightweight scraper which may return fewer (or zero) results if Google enforces bot detection.
 
-### Optional: Python `extract-emails` helper
+### Python `extract-emails` Integration
 
-You can enrich the dataset with the Python [`extract-emails`](https://pypi.org/project/extract-emails/) scraper when public websites block our Playwright crawler.
+Enrich your dataset with the Python [`extract-emails`](https://pypi.org/project/extract-emails/) scraper:
 
-1. Use Python 3.10+ and install the CLI:
-
+1. **Set up Python environment:**
    ```bash
    python3 -m venv .venv-extract
    source .venv-extract/bin/activate
    pip install "extract-emails>=5.3.3"
    ```
 
-2. Run the helper against a target page (the `requests` backend avoids the need for a local chromedriver). Save results into `output/extract-emails/` so the merger can spot them:
-
+2. **Run the helper:**
    ```bash
    python -m extract_emails.console.application \
      --url https://www.example.com/contact \
@@ -195,66 +360,134 @@ You can enrich the dataset with the Python [`extract-emails`](https://pypi.org/p
      --output-file output/extract-emails/example.csv
    ```
 
-   Increase `--depth` when you want the helper to follow in-site links (e.g. `/contact` pages). Switch `--browser-name` to `chrome` only if you have Chrome installed and need to defeat aggressive anti-bot filtering.
-
-3. Merge the CSV output into the main `emails.txt` roll-up:
-
+3. **Merge into main archive:**
    ```bash
    npm run update:emails
    ```
 
-The merger automatically ignores duplicates, enforces the seed `allowedDomains`, and keeps the running list alphabetised.
+The merger automatically handles duplicates, enforces `allowedDomains`, and maintains alphabetical order.
 
-## Architecture Overview
+### Scrapy-Based Crawling
 
-| Module | Responsibility |
-| --- | --- |
-| `GoogleMapsScraper` | Text search via Places API, pagination, rate limiting |
-| `WebCrawler` | Bounded-depth recursive crawling with external link guard |
-| `EmailExtractor` | Multi-pass extraction (mailto, text, obfuscation decoding) |
-| `DeliverabilityChecker` | MX lookup + SMTP handshake with progressive fallback |
-| `HttpDomainValidator` | HEAD/GET probes to confirm prod/dev web hosts respond |
-| `ResultStore` | JSON/CSV/Excel export |
-| `EmailScrapingPipeline` | Orchestrates the data flow, deduplication, and persistence |
+For deeper harvesting on JavaScript-heavy sites, use the Scrapy project:
 
-## Roadmap Ideas
-
-- Integrate Google My Business session scraping for UI parity with desktop electron apps.
-- Add Playwright-based JavaScript rendering for SPAs (inspired by WebDiver).
-- Allow pluggable deliverability providers (ZeroBounce, NeverBounce, etc.).
-- Bundle REST API & dashboard frontend backed by the same pipeline.
-
-## Contributing
-
-1. Fork & clone
-2. Create a feature branch
-3. Run `npm test && npm run lint`
-4. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-**Educational Purpose**: This project is intended for educational purposes only. Please review the educational disclaimer in the LICENSE file.
-
-Scrapy-based crawling
----------------------
-
-For deeper harvesting on JavaScript-heavy sites, a dedicated Scrapy project lives under `scrapy/uae_airlines_crawler`.
-
-1. Create/activate the virtualenv and install Scrapy (already bootstrapped for you):
+1. **Activate virtual environment:**
    ```bash
    cd scrapy
    source .venv/bin/activate
    ```
-2. Run a spider and export contacts as JSON Lines:
+
+2. **Run a spider:**
    ```bash
    cd uae_airlines_crawler
    scrapy crawl multi_contacts -O ../../output/contacts.jsonl
    ```
-3. Feed that JSON back into the TypeScript pipeline (e.g. merge addresses into a seed file or run deliverability checks by converting into the existing schema).
 
-The spider respects depth limits, filters out placeholder emails, and follows configured domains. Adjust start URLs or metadata as the public site structure evolves.
+3. **Merge with TypeScript pipeline:**
+   ```bash
+   npm run update:emails
+   ```
+
+The spider respects depth limits, filters placeholder emails, and follows configured domains.
 
 ---
 
+## 🎯 Performance Optimizations
+
+This project includes several performance optimizations:
+
+- **LRU Caching**: HTTP responses, DNS lookups, and HTML content are cached
+- **Connection Pooling**: Persistent HTTP/HTTPS connections for faster requests
+- **Parallel Processing**: Controlled concurrency using Promise pools
+- **Database Storage**: SQLite for efficient large-scale data management
+- **Memory Management**: Smart in-memory limits with database fallback
+
+---
+
+## 🧪 Testing
+
+Run the test suite:
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+```
+
+---
+
+## 📝 Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests and linting (`npm test && npm run lint`)
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+---
+
+## 🗺️ Roadmap
+
+Future enhancements under consideration:
+
+- 🔄 Google My Business session scraping for UI parity
+- 🎭 Enhanced Playwright-based JavaScript rendering for SPAs
+- 🔌 Pluggable deliverability providers (ZeroBounce, NeverBounce, etc.)
+- 🌐 REST API & dashboard frontend
+- 📊 Advanced analytics and reporting
+- 🔐 Enhanced security and rate limiting
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+### Educational Purpose Disclaimer
+
+This project is intended for **educational purposes only**. Users are responsible for:
+
+- ✅ Complying with all applicable laws and regulations regarding web scraping
+- ✅ Respecting `robots.txt` and website terms of service
+- ✅ Obtaining proper consent before collecting personal information
+- ✅ Using collected data ethically and responsibly
+
+The authors and contributors are not responsible for any misuse of this software.
+
+---
+
+## 🙏 Acknowledgments
+
+This project draws inspiration from several open-source projects:
+
+- [Map Email Scraper](https://github.com/MickeyUK/map-email-scraper) - Google Maps prospecting patterns
+- [MailScout](https://github.com/batuhanaky/mailscout) - Deliverability verification approaches
+- [e-scraper](https://github.com/0x4D-5A/e-scraper) - Web crawling utilities
+- [crawler-python](https://github.com/andripwn/crawler-python) - Recursive crawling strategies
+- [TS-email-scraper](https://github.com/eneiromatos/TS-email-scraper) - TypeScript email extraction patterns
+
+---
+
+## 📞 Support
+
+For questions, issues, or contributions:
+
+- 📧 Open an [Issue](https://github.com/nabilW/EmailScraping/issues)
+- 🔀 Submit a [Pull Request](https://github.com/nabilW/EmailScraping/pulls)
+- 📖 Check the [Documentation](docs/WORKFLOWS.md)
+
+---
+
+<div align="center">
+
+**Made with ❤️ for educational purposes**
+
+⭐ Star this repo if you find it helpful!
+
+</div>
